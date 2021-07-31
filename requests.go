@@ -12,6 +12,11 @@ import (
 	"github.com/go-ozzo/ozzo-validation/v4/is"
 )
 
+type authRequest struct {
+	Login       string `json:"login"`
+	SecurityKey string `json:"security_key"`
+}
+
 // TaskRequest is necessary to create a task.
 type TaskRequest struct {
 	Text                 string        `json:"text,omitempty"`
@@ -55,6 +60,7 @@ func (r TaskRequest) Validate() error {
 		validation.Field(&r.Participants, validation.Each()),
 		validation.Field(&r.Subscribers, validation.Each()),
 		validation.Field(&r.Approvals, validation.Each()),
+		validation.Field(&r.Attachments, validation.Each()),
 	)
 }
 
@@ -169,6 +175,7 @@ func (r TaskCommentRequest) Validate() error {
 		validation.Field(&r.SubscribersRerequested, validation.Each()),
 		validation.Field(&r.ParticipantsAdded, validation.Each()),
 		validation.Field(&r.ParticipantsRemoved, validation.Each()),
+		validation.Field(&r.FieldUpdates, validation.Each()),
 		validation.Field(&r.Attachments, validation.Each()),
 		validation.Field(&r.ScheduledDate, validation.Date("2006-01-02")),
 	)

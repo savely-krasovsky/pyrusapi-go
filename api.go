@@ -26,6 +26,8 @@ const (
 )
 
 type client struct {
+	baseURL string
+
 	login       string
 	securityKey string
 
@@ -39,7 +41,7 @@ type client struct {
 
 // Client is the main interface. Provided to implement dummy implementations useful for testing.
 type Client interface {
-	Auth(login, securityKey string) (*AuthResponse, error)
+	Auth(login, securityKey string) (string, error)
 	Forms() (*FormsResponse, error)
 	Form(formID int) (*FormResponse, error)
 	Registry(formID int, req *RegistryRequest) (*FormRegisterResponse, error)
@@ -48,6 +50,7 @@ type Client interface {
 	CommentTask(taskID int, req *TaskCommentRequest) (*TaskResponse, error)
 	UploadFile(name string, file io.Reader) (*UploadResponse, error)
 	DownloadFile(fileID int) (*DownloadResponse, error)
+	Catalogs() (*CatalogsResponse, error)
 	Catalog(catalogID int) (*CatalogResponse, error)
 	CreateCatalog(name string, headers []string, items []*CatalogItem) (*CatalogResponse, error)
 	SyncCatalog(catalogID int, apply bool, headers []string, items []*CatalogItem) (*SyncCatalogResponse, error)
@@ -100,9 +103,17 @@ func WithEventBufferSize(size int) Option {
 	}
 }
 
+func WithBaseURL(baseURL string) Option {
+	return func(c *client) {
+		c.baseURL = baseURL
+	}
+}
+
 // NewClient returns an instance of Client.
 func NewClient(login, securityKey string, opts ...Option) (Client, error) {
 	c := &client{
+		baseURL: baseURL,
+
 		login:       login,
 		securityKey: securityKey,
 
@@ -120,13 +131,13 @@ func NewClient(login, securityKey string, opts ...Option) (Client, error) {
 }
 
 func (c *client) getAndSetAccessToken() error {
-	authResp, err := c.Auth(c.login, c.securityKey)
+	accessToken, err := c.Auth(c.login, c.securityKey)
 	if err != nil {
 		return err
 	}
 
 	c.mu.Lock()
-	c.accessToken = authResp.AccessToken
+	c.accessToken = accessToken
 	c.mu.Unlock()
 
 	return nil
@@ -138,7 +149,7 @@ func (c *client) performRequest(method, path string, q *url.Values, reqBody, res
 		auth = true
 	}
 
-	u, err := url.Parse(baseURL + path)
+	u, err := url.Parse(c.baseURL + path)
 	if err != nil {
 		c.logger.Error("Error while parsing a URL!", err)
 		return err
@@ -148,10 +159,8 @@ func (c *client) performRequest(method, path string, q *url.Values, reqBody, res
 	}
 
 	multipartRequest := false
-	if reqBody != nil {
-		if _, ok := reqBody.(*fileRequest); ok {
-			multipartRequest = true
-		}
+	if _, ok := reqBody.(*fileRequest); ok {
+		multipartRequest = true
 	}
 
 	var (
@@ -219,6 +228,7 @@ func (c *client) performRequest(method, path string, q *url.Values, reqBody, res
 		c.logger.Error("Error while doing a request!", err)
 		return err
 	}
+	//nolint:errcheck
 	defer resp.Body.Close()
 
 	// Get new access_token in case of old session
@@ -228,6 +238,11 @@ func (c *client) performRequest(method, path string, q *url.Values, reqBody, res
 		}
 
 		return c.performRequest(method, path, q, reqBody, respBody)
+	}
+
+	// Don't read empty responses
+	if respBody == nil {
+		return nil
 	}
 
 	// File downloading
@@ -282,17 +297,16 @@ func (c *client) performRequest(method, path string, q *url.Values, reqBody, res
 }
 
 // Auth performs authorization and returns access_token.
-func (c *client) Auth(login, securityKey string) (*AuthResponse, error) {
-	q := &url.Values{}
-	q.Set("login", login)
-	q.Set("security_key", securityKey)
-
+func (c *client) Auth(login, securityKey string) (string, error) {
 	var respBody AuthResponse
-	if err := c.performRequest(http.MethodGet, "/auth", q, nil, &respBody); err != nil {
-		return nil, err
+	if err := c.performRequest(http.MethodPost, "/auth", nil, &authRequest{
+		Login:       login,
+		SecurityKey: securityKey,
+	}, &respBody); err != nil {
+		return "", err
 	}
 
-	return &respBody, nil
+	return respBody.AccessToken, nil
 }
 
 // Forms returns a description of all the forms in which the current user is a manager or a member.
@@ -394,10 +408,20 @@ func (c *client) DownloadFile(fileID int) (*DownloadResponse, error) {
 	}, nil
 }
 
+// Catalogs returns a list of available catalogs.
+func (c *client) Catalogs() (*CatalogsResponse, error) {
+	var catalogs CatalogsResponse
+	if err := c.performRequest(http.MethodGet, "/catalogs", nil, nil, &catalogs); err != nil {
+		return nil, err
+	}
+
+	return &catalogs, nil
+}
+
 // Catalog returns a catalog with all its elements.
 func (c *client) Catalog(catalogID int) (*CatalogResponse, error) {
 	var catalog CatalogResponse
-	if err := c.performRequest(http.MethodGet, "/catalog/"+strconv.Itoa(catalogID), nil, nil, &catalog); err != nil {
+	if err := c.performRequest(http.MethodGet, "/catalogs/"+strconv.Itoa(catalogID), nil, nil, &catalog); err != nil {
 		return nil, err
 	}
 
@@ -575,6 +599,10 @@ func (c *client) Inbox(itemCount int) (*TaskListResponse, error) {
 
 // RegisterCall returns the GUID of the incoming call, and the id of the generated request.
 func (c *client) RegisterCall(req *RegisterCallRequest) (*RegisterCallResponse, error) {
+	if err := req.Validate(); err != nil {
+		return nil, err
+	}
+
 	var call RegisterCallResponse
 	if err := c.performRequest(http.MethodPost, "/calls", nil, req, &call); err != nil {
 		return nil, err

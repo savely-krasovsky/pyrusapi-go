@@ -1,0 +1,162 @@
+{
+  "event": "comment",
+  "access_token": "token",
+  "task_id": 123456,
+  "user_id": 123456,
+  "bot_settings": "",
+  "task": {
+    "id": 123456,
+    "text": "Пример",
+    "create_date": "2021-07-21T13:00:33Z",
+    "last_modified_date": "2021-07-31T18:22:56Z",
+    "author": {
+      "id": 123456,
+      "first_name": "Иван",
+      "last_name": "Иванов",
+      "email": "ivanov@example.org",
+      "type": "user",
+      "external_id": "0fbe8fa0-6243-4c1c-9a2b-8713d4f94347",
+      "department_id": 123456,
+      "banned": false,
+      "position": "Аналитик",
+      "skype": "",
+      "phone": ""
+    },
+    "list_ids": [
+      123456
+    ],
+    "subscribers": [
+      {
+        "person": {
+          "id": 123456,
+          "first_name": "",
+          "last_name": "Аналитик",
+          "email": "",
+          "type": "role",
+          "external_id": "",
+          "banned": false,
+          "position": "",
+          "skype": "",
+          "phone": ""
+        }
+      }
+    ],
+    "form_id": 123456,
+    "approvals": [
+      [
+        {
+          "person": {
+            "id": 123456,
+            "first_name": "Бот",
+            "last_name": "",
+            "email": "bot@a577e1d8-35ee-43a3-aa0b-e38b102cb436",
+            "type": "bot",
+            "external_id": "",
+            "banned": false,
+            "position": "",
+            "skype": "",
+            "phone": ""
+          },
+          "approval_choice": "waiting"
+        }
+      ],
+      [
+        {
+          "person": {
+            "id": 123456,
+            "first_name": "",
+            "last_name": "Аналитик",
+            "email": "",
+            "type": "role",
+            "external_id": "",
+            "banned": false,
+            "position": "",
+            "skype": "",
+            "phone": ""
+          },
+          "approval_choice": "waiting"
+        }
+      ]
+    ],
+    "current_step": 2,
+    "fields": [
+      {
+        "id": 1,
+        "type": "text",
+        "name": "Пример поля",
+        "value": "example.org"
+      }
+    ],
+    "comments": [
+      {
+        "id": 123456,
+        "text": "Проверка",
+        "create_date": "2021-07-21T13:00:33Z",
+        "author": {
+          "id": 123456,
+          "first_name": "Иван",
+          "last_name": "Иванов",
+          "email": "ivanov@example.org",
+          "type": "user",
+          "external_id": "0fbe8fa0-6243-4c1c-9a2b-8713d4f94347",
+          "department_id": 123456,
+          "banned": false,
+          "position": "Аналитик по информационной безопасности",
+          "skype": "",
+          "phone": ""
+        },
+        "added_list_ids": [
+          123456
+        ],
+        "reassigned_to": {
+          "id": 1730,
+          "first_name": "",
+          "last_name": "Pyrus.com",
+          "type": "user",
+          "external_id": ""
+        },
+        "field_updates": [
+          {
+            "id": 20,
+            "type": "text",
+            "name": "Ресурс",
+            "value": "example.org"
+          }
+        ],
+        "approvals_added": [
+          [
+            {
+              "person": {
+                "id": 123456,
+                "first_name": "Бот",
+                "last_name": "",
+                "email": "bot@a577e1d8-35ee-43a3-aa0b-e38b102cb436",
+                "type": "bot",
+                "external_id": "",
+                "banned": false,
+                "position": "",
+                "skype": "",
+                "phone": ""
+              },
+              "step": 1
+            }
+          ]
+        ],
+        "subscribers_added": [
+          {
+            "id": 123456,
+            "first_name": "",
+            "last_name": "Аналитики",
+            "email": "",
+            "type": "role",
+            "external_id": "",
+            "banned": false,
+            "position": "",
+            "skype": "",
+            "phone": ""
+          }
+        ]
+      }
+    ]
+  }
+}

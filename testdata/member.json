@@ -1,0 +1,14 @@
+{
+  "id": 123456,
+  "first_name": "Иван",
+  "last_name": "Иванов",
+  "email": "ivanov@example.org",
+  "type": "user",
+  "external_id": "0fbe8fa0-6243-4c1c-9a2b-8713d4f94347",
+  "department_id": 123456,
+  "department_name": "Департамент IT",
+  "banned": false,
+  "position": "Аналитик",
+  "skype": "",
+  "phone": ""
+}

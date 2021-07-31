@@ -62,27 +62,19 @@ func (f *FormField) UnmarshalJSON(b []byte) error {
 		return nil
 	}
 
+	var err error
 	switch raw.Type {
 	case FieldTypeText:
 		var text string
-		if err := json.Unmarshal(raw.Value, &text); err != nil {
-			return err
-		}
-
+		err = json.Unmarshal(raw.Value, &text)
 		f.Value = text
 	case FieldTypeMoney:
 		var money float64
-		if err := json.Unmarshal(raw.Value, &money); err != nil {
-			return err
-		}
-
+		err = json.Unmarshal(raw.Value, &money)
 		f.Value = money
 	case FieldTypeNumber:
 		var number float64
-		if err := json.Unmarshal(raw.Value, &number); err != nil {
-			return err
-		}
-
+		err = json.Unmarshal(raw.Value, &number)
 		f.Value = number
 	case FieldTypeDate:
 		var dateStr string
@@ -110,10 +102,7 @@ func (f *FormField) UnmarshalJSON(b []byte) error {
 		f.Value = t
 	case FieldTypeCheckmark:
 		var checkmark CheckmarkType
-		if err := json.Unmarshal(raw.Value, &checkmark); err != nil {
-			return err
-		}
-
+		err = json.Unmarshal(raw.Value, &checkmark)
 		f.Value = checkmark
 	case FieldTypeDueDate:
 		var dateStr string
@@ -141,38 +130,23 @@ func (f *FormField) UnmarshalJSON(b []byte) error {
 		f.Value = date
 	case FieldTypeEmail:
 		var email string
-		if err := json.Unmarshal(raw.Value, &email); err != nil {
-			return err
-		}
-
+		err = json.Unmarshal(raw.Value, &email)
 		f.Value = email
 	case FieldTypePhone:
 		var phone string
-		if err := json.Unmarshal(raw.Value, &phone); err != nil {
-			return err
-		}
-
+		err = json.Unmarshal(raw.Value, &phone)
 		f.Value = phone
 	case FieldTypeFlag:
 		var flg FlagType
-		if err := json.Unmarshal(raw.Value, &flg); err != nil {
-			return err
-		}
-
+		err = json.Unmarshal(raw.Value, &flg)
 		f.Value = flg
 	case FieldTypeStep:
 		var step int
-		if err := json.Unmarshal(raw.Value, &step); err != nil {
-			return err
-		}
-
+		err = json.Unmarshal(raw.Value, &step)
 		f.Value = step
 	case FieldTypeStatus:
 		var status StatusType
-		if err := json.Unmarshal(raw.Value, &status); err != nil {
-			return err
-		}
-
+		err = json.Unmarshal(raw.Value, &status)
 		f.Value = status
 	case FieldTypeCreationDate:
 		var dateStr string
@@ -188,77 +162,47 @@ func (f *FormField) UnmarshalJSON(b []byte) error {
 		f.Value = date
 	case FieldTypeNote:
 		var note string
-		if err := json.Unmarshal(raw.Value, &note); err != nil {
-			return err
-		}
-
+		err = json.Unmarshal(raw.Value, &note)
 		f.Value = note
 	case FieldTypeCatalog:
 		var catalogItem CatalogItem
-		if err := json.Unmarshal(raw.Value, &catalogItem); err != nil {
-			return err
-		}
-
+		err = json.Unmarshal(raw.Value, &catalogItem)
 		f.Value = &catalogItem
 	case FieldTypeFile:
 		var files []*File
-		if err := json.Unmarshal(raw.Value, &files); err != nil {
-			return err
-		}
-
+		err = json.Unmarshal(raw.Value, &files)
 		f.Value = files
 	case FieldTypePerson:
 		var person Person
-		if err := json.Unmarshal(raw.Value, &person); err != nil {
-			return err
-		}
-
+		err = json.Unmarshal(raw.Value, &person)
 		f.Value = &person
 	case FieldTypeAuthor:
 		var author Person
-		if err := json.Unmarshal(raw.Value, &author); err != nil {
-			return err
-		}
-
+		err = json.Unmarshal(raw.Value, &author)
 		f.Value = &author
 	case FieldTypeTable:
 		var table Table
-		if err := json.Unmarshal(raw.Value, &table); err != nil {
-			return err
-		}
-
+		err = json.Unmarshal(raw.Value, &table)
 		f.Value = table
 	case FieldTypeMultipleChoice:
 		var mc MultipleChoice
-		if err := json.Unmarshal(raw.Value, &mc); err != nil {
-			return err
-		}
-
+		err = json.Unmarshal(raw.Value, &mc)
 		f.Value = &mc
 	case FieldTypeTitle:
 		var title Title
-		if err := json.Unmarshal(raw.Value, &title); err != nil {
-			return err
-		}
-
+		err = json.Unmarshal(raw.Value, &title)
 		f.Value = &title
 	case FieldTypeFormLink:
 		var formLink FormLink
-		if err := json.Unmarshal(raw.Value, &formLink); err != nil {
-			return err
-		}
-
+		err = json.Unmarshal(raw.Value, &formLink)
 		f.Value = &formLink
 	default:
 		var i interface{}
-		if err := json.Unmarshal(raw.Value, &i); err != nil {
-			return err
-		}
-
+		err = json.Unmarshal(raw.Value, &i)
 		f.Value = i
 	}
 
-	return nil
+	return err
 }
 
 // TaskHeader represents only basic information about a task.
@@ -463,13 +407,16 @@ type TaskList struct {
 
 // Member represents a member of organization.
 type Member struct {
-	ID        int        `json:"id"`
-	FirstName string     `json:"first_name"`
-	LastName  string     `json:"last_name"`
-	Email     string     `json:"email"`
-	Type      PersonType `json:"type"`
-	Banned    bool       `json:"banned"`
-	Position  string     `json:"position"`
-	Skype     string     `json:"skype"`
-	Phone     string     `json:"phone"`
+	ID             int        `json:"id"`
+	FirstName      string     `json:"first_name"`
+	LastName       string     `json:"last_name"`
+	Email          string     `json:"email"`
+	Type           PersonType `json:"type"`
+	ExternalID     string     `json:"external_id"`
+	DepartmentID   int        `json:"department_id"`
+	DepartmentName string     `json:"department_name"`
+	Banned         bool       `json:"banned"`
+	Position       string     `json:"position"`
+	Skype          string     `json:"skype"`
+	Phone          string     `json:"phone"`
 }

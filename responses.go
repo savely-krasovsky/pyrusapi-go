@@ -42,11 +42,21 @@ type ContactsResponse struct {
 	Organizations []*Organization `json:"organizations"`
 }
 
+// CatalogsResponse represents a list of available catalogs
+type CatalogsResponse struct {
+	Catalogs []*CatalogResponse `json:"catalogs"`
+}
+
 // CatalogResponse represents a response from Catalog method.
 type CatalogResponse struct {
-	Items          []*CatalogItem   `json:"items"`
-	CatalogID      int              `json:"catalog_id"`
-	CatalogHeaders []*CatalogHeader `json:"catalog_headers"`
+	CatalogID       int              `json:"catalog_id"`
+	Name            string           `json:"name"`
+	Version         int              `json:"version"`
+	Supervisors     []int            `json:"supervisors"`
+	Deleted         bool             `json:"deleted"`
+	ExternalVersion int              `json:"external_version"`
+	CatalogHeaders  []*CatalogHeader `json:"catalog_headers"`
+	Items           []*CatalogItem   `json:"items"`
 }
 
 // UploadResponse represents a response from UploadFile method.
@@ -104,7 +114,7 @@ type ProfileResponse struct {
 // RegisterCallResponse represents a response from RegisterCall method.
 type RegisterCallResponse struct {
 	CallGUID string `json:"call_guid"`
-	TaskID   int    `json:"task_id"`
+	TaskID   string `json:"task_id"`
 }
 
 // Event represents an event received from webhook.

@@ -1,0 +1,9 @@
+----------------------------990287221232705950774263
+Content-Disposition: form-data; name="file"; filename="uploaded_file.json"
+Content-Type: application/json
+
+{
+  "guid": "41291def-91d4-4d27-a899-a03bf86d3834",
+  "md5_hash": "ACD996A7F297D1AC35DDAA23D64A2D52"
+}
+----------------------------990287221232705950774263--

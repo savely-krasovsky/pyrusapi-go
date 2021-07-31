@@ -1,0 +1,31 @@
+name: Test and coverage
+on: [push, pull_request]
+jobs:
+  test:
+    strategy:
+      matrix:
+        go-version: [ 1.16.x ]
+        os: [ ubuntu-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Test
+        env:
+          PYRUS_LOGIN: ${{ secrets.PYRUS_LOGIN }}
+          PYRUS_SECURITY_KEY: ${{ secrets.PYRUS_SECURITY_KEY }}
+          PYRUS_FORM_ID: ${{ secrets.PYRUS_FORM_ID }}
+          PYRUS_TASK_ID: ${{ secrets.PYRUS_TASK_ID }}
+          PYRUS_CATALOG_ID: ${{ secrets.PYRUS_CATALOG_ID }}
+          PYRUS_MEMBER_ID: ${{ secrets.PYRUS_MEMBER_ID }}
+          PYRUS_ROLE_ID: ${{ secrets.PYRUS_ROLE_ID }}
+          PYRUS_LIST_ID: ${{ secrets.PYRUS_LIST_ID }}
+          PYRUS_FILE_ID: ${{ secrets.PYRUS_FILE_ID }}
+          PYRUS_CALL_GUID: ${{ secrets.PYRUS_CALL_GUID }}
+        run: go test -race -coverprofile="coverage.txt" -covermode=atomic
+      - name: Upload coverage to Codecov
+        run: bash <(curl -s https://codecov.io/bash)

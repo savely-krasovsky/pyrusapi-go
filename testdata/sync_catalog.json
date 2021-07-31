@@ -1,0 +1,23 @@
+{
+  "apply": false,
+  "updated": [
+    {
+      "item_id": 123456,
+      "values": [
+        "Иван"
+      ]
+    },
+    {
+      "item_id": 123456,
+      "values": [
+        "Василий"
+      ]
+    }
+  ],
+  "catalog_headers": [
+    {
+      "name": "Имя",
+      "type": "text"
+    }
+  ]
+}

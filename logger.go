@@ -18,6 +18,4 @@ func (l *zapLogger) Error(msg string, err error) {
 
 type noopLogger struct{}
 
-func (l *noopLogger) Error(msg string, err error) {
-	return
-}
+func (l *noopLogger) Error(string, error) {}

@@ -56,6 +56,7 @@ Files:
 - [x] `GET /files/download/{file-id}`
 
 Catalogs:
+- [x] `GET /catalogs`
 - [x] `GET /catalogs/{catalog-id}`
 - [x] `PUT /catalogs`
 - [x] `POST /catalogs/{catalog-id}`
@@ -81,3 +82,21 @@ Telephony:
 
 Webhooks:
 - [x] Use `WebhookHandler() (http.HandlerFunc, <-chan Event)`
+
+# Tests
+To test project you have to download sample responses from your organization. I cannot upload my own, because it could
+contain sensitive information, and I'm too lazy to fake it :)
+
+Set those environment variables and run tests:
+```dotenv
+PYRUS_LOGIN=login
+PYRUS_SECURITY_KEY=securityKey
+PYRUS_FORM_ID=123456
+PYRUS_TASK_ID=123456
+PYRUS_CATALOG_ID=123456
+PYRUS_MEMBER_ID=123456
+PYRUS_ROLE_ID=123456
+PYRUS_LIST_ID=123456
+PYRUS_FILE_ID=123456
+PYRUS_CALL_GUID=5d8dc3d6-27e7-4cd4-a057-2b4f4d74e0a5
+```

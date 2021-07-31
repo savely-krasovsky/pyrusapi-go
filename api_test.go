@@ -396,10 +396,7 @@ func TestNewClient(t *testing.T) {
 
 func TestClient_ListenWebhook(t *testing.T) {
 	handler, events := cl.WebhookHandler()
-
-	go func() {
-		require.NoError(t, http.ListenAndServe("127.0.0.1:30000", handler))
-	}()
+	ts := httptest.NewServer(handler)
 
 	f, err := os.Open("testdata/event.json")
 	require.NoError(t, err)
@@ -413,7 +410,11 @@ func TestClient_ListenWebhook(t *testing.T) {
 	require.NoError(t, err)
 	hash := strings.ToUpper(hex.EncodeToString(hasher.Sum(nil)))
 
-	req, err := http.NewRequest(http.MethodPost, "http://127.0.0.1:30000", bytes.NewBuffer(b))
+	req, err := http.NewRequest(
+		http.MethodPost,
+		ts.URL,
+		bytes.NewBuffer(b),
+	)
 	require.NoError(t, err)
 	req.Header.Set("X-Pyrus-Sig", hash)
 

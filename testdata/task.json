@@ -1,0 +1,645 @@
+{
+  "task": {
+    "id": 123456,
+    "text": "Форма для тестов: Пример",
+    "create_date": "2021-07-31T21:29:41Z",
+    "last_modified_date": "2021-07-31T21:29:41Z",
+    "author": {
+      "id": 123456,
+      "first_name": "Савелий Игоревич",
+      "last_name": "Красовский",
+      "email": "savely.krasovsky@example.org",
+      "type": "user",
+      "external_id": "8e02d19b-8762-40ad-b04a-74c78e8a8977",
+      "department_id": 123456,
+      "banned": false,
+      "position": "Аналитик по информационной безопасности",
+      "skype": "",
+      "phone": ""
+    },
+    "due": "2021-08-01T21:20:00Z",
+    "list_ids": [
+      951252
+    ],
+    "form_id": 123456,
+    "approvals": [
+      [
+        {
+          "person": {
+            "id": 123456,
+            "first_name": "Савелий Игоревич",
+            "last_name": "Красовский",
+            "email": "savely.krasovsky@example.org",
+            "type": "user",
+            "external_id": "8e02d19b-8762-40ad-b04a-74c78e8a8977",
+            "department_id": 123456,
+            "banned": false,
+            "position": "Аналитик по информационной безопасности",
+            "skype": "",
+            "phone": ""
+          },
+          "approval_choice": "waiting"
+        }
+      ]
+    ],
+    "current_step": 1,
+    "linked_task_ids": [
+      90677665
+    ],
+    "fields": [
+      {
+        "id": 1,
+        "type": "text",
+        "name": "Текст",
+        "value": "Пример"
+      },
+      {
+        "id": 2,
+        "type": "multiple_choice",
+        "name": "Выбор",
+        "value": {
+          "choice_id": 1,
+          "choice_ids": [
+            1
+          ],
+          "choice_names": [
+            "Да"
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "type": "checkmark",
+        "name": "Галочка",
+        "value": "checked"
+      },
+      {
+        "id": 4,
+        "type": "catalog",
+        "name": "Справочник",
+        "value": {
+          "item_id": 123456,
+          "item_ids": [
+            78122345
+          ],
+          "headers": [
+            "Департамент коммуникаций с Клиентами/Управление дистанционных продаж"
+          ],
+          "values": [
+            "Управление клиентского сервиса/Дивизион корпоративного бизнеса"
+          ],
+          "rows": [
+            [
+              "Управление клиентского сервиса/Дивизион корпоративного бизнеса"
+            ]
+          ]
+        }
+      },
+      {
+        "id": 5,
+        "type": "form_link",
+        "name": "[Проверка ИБ] Контроль исправлений",
+        "value": {
+          "task_id": 123456,
+          "task_ids": [
+            90677665
+          ],
+          "subject": "[Проверка ИБ] Контроль исправлений: backoffice.halvacard.ru"
+        }
+      },
+      {
+        "id": 6,
+        "type": "number",
+        "name": "Число",
+        "value": 3000
+      },
+      {
+        "id": 7,
+        "type": "number",
+        "name": "Число",
+        "value": 1
+      },
+      {
+        "id": 8,
+        "type": "money",
+        "name": "Деньги",
+        "value": 1000
+      },
+      {
+        "id": 9,
+        "type": "date",
+        "name": "Дата",
+        "value": "2021-08-01"
+      },
+      {
+        "id": 10,
+        "type": "time",
+        "name": "Время",
+        "value": "21:20"
+      },
+      {
+        "id": 11,
+        "type": "phone",
+        "name": "Телефон",
+        "value": "79000000000,12345"
+      },
+      {
+        "id": 12,
+        "type": "email",
+        "name": "Эл. почта",
+        "value": "mail@example.org"
+      },
+      {
+        "id": 13,
+        "type": "person",
+        "name": "Контакт",
+        "value": {
+          "id": 123456,
+          "first_name": "Савелий Игоревич",
+          "last_name": "Красовский",
+          "email": "savely.krasovsky@example.org",
+          "type": "user",
+          "external_id": "8e02d19b-8762-40ad-b04a-74c78e8a8977",
+          "department_id": 123456,
+          "banned": false,
+          "position": "Аналитик по информационной безопасности",
+          "skype": "",
+          "phone": ""
+        }
+      },
+      {
+        "id": 14,
+        "type": "file",
+        "name": "Файлы",
+        "value": [
+          {
+            "id": 123456,
+            "name": "uploaded_file.json",
+            "size": 93,
+            "version": 1,
+            "md5": "9F07AFEA091C553B1CD092FBD34F86F7",
+            "url": "https://pyrus.com/services/attachment?id=123456"
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "type": "file",
+        "name": "Подпись"
+      },
+      {
+        "id": 16,
+        "type": "title",
+        "name": "Группа",
+        "value": {
+          "checkmark": "unchecked",
+          "fields": [
+            {
+              "id": 17,
+              "type": "text",
+              "name": "Текст",
+              "parent_id": 16,
+              "value": "ПАО «Совкомбанк»"
+            },
+            {
+              "id": 18,
+              "type": "text",
+              "name": "Наименование (Текст)",
+              "parent_id": 16,
+              "value": "ПАО \"СОВКОМБАНК\""
+            },
+            {
+              "id": 19,
+              "type": "text",
+              "name": "Адрес (Текст)",
+              "parent_id": 16,
+              "value": "156000, г Кострома, пр-т Текстильщиков, 46"
+            },
+            {
+              "id": 20,
+              "type": "text",
+              "name": "БИК (Текст)",
+              "parent_id": 16,
+              "value": "043469743"
+            },
+            {
+              "id": 21,
+              "type": "text",
+              "name": "ИНН (Текст)",
+              "parent_id": 16,
+              "value": "4401116480"
+            }
+          ]
+        }
+      },
+      {
+        "id": 22,
+        "type": "table",
+        "name": "Таблица",
+        "value": [
+          {
+            "row_id": 0,
+            "cells": [
+              {
+                "id": 23,
+                "type": "text",
+                "name": "Текст",
+                "parent_id": 22,
+                "row_id": 0,
+                "value": "420107, Респ. Татарстан, г. Казань, ул. Петербургская, зд. 50 к. 8"
+              },
+              {
+                "id": 24,
+                "type": "text",
+                "name": "Индекс (Текст)",
+                "parent_id": 22,
+                "row_id": 0,
+                "value": "420107"
+              },
+              {
+                "id": 25,
+                "type": "text",
+                "name": "Регион (Текст)",
+                "parent_id": 22,
+                "row_id": 0,
+                "value": "Татарстан"
+              },
+              {
+                "id": 26,
+                "type": "text",
+                "name": "Город (Текст)",
+                "parent_id": 22,
+                "row_id": 0,
+                "value": "Казань"
+              },
+              {
+                "id": 27,
+                "type": "text",
+                "name": "Улица (Текст)",
+                "parent_id": 22,
+                "row_id": 0,
+                "value": "Петербургская"
+              },
+              {
+                "id": 29,
+                "type": "text",
+                "name": "Дом (Текст)",
+                "parent_id": 22,
+                "row_id": 0,
+                "value": "50"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": 28,
+        "type": "note",
+        "name": "Примечание",
+        "value": "Примечание"
+      },
+      {
+        "id": 31,
+        "type": "status",
+        "name": "Открыта / Завершена",
+        "value": "open"
+      },
+      {
+        "id": 32,
+        "type": "author",
+        "name": "Автор",
+        "value": {
+          "id": 123456,
+          "first_name": "Савелий Игоревич",
+          "last_name": "Красовский",
+          "email": "savely.krasovsky@example.org",
+          "type": "user",
+          "external_id": "8e02d19b-8762-40ad-b04a-74c78e8a8977",
+          "department_id": 123456,
+          "banned": false,
+          "position": "Аналитик по информационной безопасности",
+          "skype": "",
+          "phone": ""
+        }
+      },
+      {
+        "id": 33,
+        "type": "creation_date",
+        "name": "Дата создания",
+        "value": "2021-07-31"
+      },
+      {
+        "id": 34,
+        "type": "due_date_time",
+        "name": "Срок",
+        "value": "2021-08-01T21:20:00Z"
+      },
+      {
+        "id": 35,
+        "type": "step",
+        "name": "Этап",
+        "value": 1
+      },
+      {
+        "_not_real_field_": true,
+        "id": 36,
+        "type": "due_date",
+        "name": "Срок",
+        "value": "2021-08-01"
+      },
+      {
+        "_not_real_field_": true,
+        "id": 37,
+        "type": "flag",
+        "name": "Не знаю как создать это поле в форме, создано согласно документации",
+        "value": "none"
+      },
+      {
+        "_not_real_field_": true,
+        "id": 37,
+        "type": "unknown",
+        "name": "Новый тип поля",
+        "value": ["test", "test2"]
+      }
+    ],
+    "comments": [
+      {
+        "id": 123456,
+        "text": "Форма для тестов",
+        "create_date": "2021-07-31T21:29:41Z",
+        "author": {
+          "id": 123456,
+          "first_name": "Савелий Игоревич",
+          "last_name": "Красовский",
+          "email": "savely.krasovsky@example.org",
+          "type": "user",
+          "external_id": "8e02d19b-8762-40ad-b04a-74c78e8a8977",
+          "department_id": 123456,
+          "banned": false,
+          "position": "Аналитик по информационной безопасности",
+          "skype": "",
+          "phone": ""
+        },
+        "added_list_ids": [
+          951252
+        ],
+        "reassigned_to": {
+          "id": 1730,
+          "first_name": "",
+          "last_name": "Pyrus.com",
+          "type": "user",
+          "external_id": ""
+        },
+        "field_updates": [
+          {
+            "id": 1,
+            "type": "text",
+            "name": "Текст",
+            "value": "Пример"
+          },
+          {
+            "id": 2,
+            "type": "multiple_choice",
+            "name": "Выбор",
+            "value": {
+              "choice_id": 1,
+              "choice_ids": [
+                1
+              ],
+              "choice_names": [
+                "Да"
+              ]
+            }
+          },
+          {
+            "id": 3,
+            "type": "checkmark",
+            "name": "Галочка",
+            "value": "checked"
+          },
+          {
+            "id": 4,
+            "type": "catalog",
+            "name": "Справочник",
+            "value": {
+              "item_id": 123456,
+              "item_ids": [
+                78122345
+              ],
+              "headers": [
+                "Департамент коммуникаций с Клиентами/Управление дистанционных продаж"
+              ],
+              "values": [
+                "Управление клиентского сервиса/Дивизион корпоративного бизнеса"
+              ],
+              "rows": [
+                [
+                  "Управление клиентского сервиса/Дивизион корпоративного бизнеса"
+                ]
+              ]
+            }
+          },
+          {
+            "id": 5,
+            "type": "form_link",
+            "name": "Пример формы 2",
+            "value": {
+              "task_id": 123456,
+              "task_ids": [
+                123456
+              ],
+              "subject": "[Проверка ИБ] Контроль исправлений: backoffice.halvacard.ru"
+            }
+          },
+          {
+            "id": 6,
+            "type": "number",
+            "name": "Число",
+            "value": 3000
+          },
+          {
+            "id": 8,
+            "type": "money",
+            "name": "Деньги",
+            "value": 1000
+          },
+          {
+            "id": 9,
+            "type": "date",
+            "name": "Дата",
+            "value": "2021-08-01"
+          },
+          {
+            "id": 10,
+            "type": "time",
+            "name": "Время",
+            "value": "21:20"
+          },
+          {
+            "id": 11,
+            "type": "phone",
+            "name": "Телефон",
+            "value": "79000000000,12345"
+          },
+          {
+            "id": 12,
+            "type": "email",
+            "name": "Эл. почта",
+            "value": "mail@example.org"
+          },
+          {
+            "id": 13,
+            "type": "person",
+            "name": "Контакт"
+          },
+          {
+            "id": 14,
+            "type": "file",
+            "name": "Файлы",
+            "value": [
+              {
+                "id": 123456,
+                "name": "uploaded_file.json",
+                "size": 93,
+                "version": 1,
+                "md5": "9F07AFEA091C553B1CD092FBD34F86F7",
+                "url": "https://pyrus.com/services/attachment?id=123456"
+              }
+            ]
+          },
+          {
+            "id": 16,
+            "type": "title",
+            "name": "Группа",
+            "value": {
+              "fields": [
+                {
+                  "id": 17,
+                  "type": "text",
+                  "name": "Текст",
+                  "parent_id": 16,
+                  "value": "ПАО «Совкомбанк»"
+                },
+                {
+                  "id": 18,
+                  "type": "text",
+                  "name": "Наименование (Текст)",
+                  "parent_id": 16,
+                  "value": "ПАО \"СОВКОМБАНК\""
+                },
+                {
+                  "id": 19,
+                  "type": "text",
+                  "name": "Адрес (Текст)",
+                  "parent_id": 16,
+                  "value": "156000, г Кострома, пр-т Текстильщиков, 46"
+                },
+                {
+                  "id": 20,
+                  "type": "text",
+                  "name": "БИК (Текст)",
+                  "parent_id": 16,
+                  "value": "043469743"
+                },
+                {
+                  "id": 21,
+                  "type": "text",
+                  "name": "ИНН (Текст)",
+                  "parent_id": 16,
+                  "value": "4401116480"
+                }
+              ]
+            }
+          },
+          {
+            "id": 22,
+            "type": "table",
+            "name": "Таблица",
+            "value": [
+              {
+                "row_id": 0,
+                "cells": [
+                  {
+                    "id": 23,
+                    "type": "text",
+                    "name": "Текст",
+                    "parent_id": 22,
+                    "value": "420107, Респ. Татарстан, г. Казань, ул. Петербургская, зд. 50 к. 8"
+                  },
+                  {
+                    "id": 24,
+                    "type": "text",
+                    "name": "Индекс (Текст)",
+                    "parent_id": 22,
+                    "value": "420107"
+                  },
+                  {
+                    "id": 25,
+                    "type": "text",
+                    "name": "Регион (Текст)",
+                    "parent_id": 22,
+                    "value": "Татарстан"
+                  },
+                  {
+                    "id": 26,
+                    "type": "text",
+                    "name": "Город (Текст)",
+                    "parent_id": 22,
+                    "value": "Казань"
+                  },
+                  {
+                    "id": 27,
+                    "type": "text",
+                    "name": "Улица (Текст)",
+                    "parent_id": 22,
+                    "value": "Петербургская"
+                  },
+                  {
+                    "id": 29,
+                    "type": "text",
+                    "name": "Дом (Текст)",
+                    "parent_id": 22,
+                    "value": "50"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": 34,
+            "type": "due_date_time",
+            "name": "Срок",
+            "value": "2021-08-01T21:20:00Z"
+          },
+          {
+            "id": 7,
+            "type": "number",
+            "name": "Число",
+            "value": 1
+          }
+        ],
+        "approvals_added": [
+          [
+            {
+              "person": {
+                "id": 123456,
+                "first_name": "Савелий Игоревич",
+                "last_name": "Красовский",
+                "email": "savely.krasovsky@example.org",
+                "type": "user",
+                "external_id": "8e02d19b-8762-40ad-b04a-74c78e8a8977",
+                "department_id": 123456,
+                "banned": false,
+                "position": "Аналитик по информационной безопасности",
+                "skype": "",
+                "phone": ""
+              },
+              "step": 1
+            }
+          ]
+        ],
+        "due": "2021-08-01T21:20:00Z"
+      }
+    ]
+  }
+}

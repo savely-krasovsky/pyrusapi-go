@@ -39,7 +39,7 @@ var (
 	callGUID         string
 
 	logger, _ = zap.NewDevelopment()
-	cl        Client
+	cl        IClient
 	ts        *httptest.Server
 )
 
@@ -392,9 +392,20 @@ func TestNewClient(t *testing.T) {
 	profile, err := c.Profile()
 	assert.NoError(t, err)
 	assert.NotNil(t, profile)
+
+	c, err = NewClient(
+		pyrusLogin,
+		pyrusSecurityKey,
+		WithBaseURL("invalid url"),
+	)
+	require.NoError(t, err)
+	assert.NotNil(t, c)
+
+	_, err = c.Profile()
+	assert.Error(t, err)
 }
 
-func TestClient_ListenWebhook(t *testing.T) {
+func TestClient_WebhookHandler(t *testing.T) {
 	handler, events := cl.WebhookHandler()
 	ts := httptest.NewServer(handler)
 

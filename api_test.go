@@ -495,14 +495,48 @@ func TestClient_WebhookHandler(t *testing.T) {
 		bytes.NewBuffer(b),
 	)
 	require.NoError(t, err)
-	req.Header.Set("X-Pyrus-Sig", hash)
 
-	resp, err := http.DefaultClient.Do(req)
-	require.NoError(t, err)
-	assert.NoError(t, resp.Body.Close())
+	t.Run("valid hash", func(t *testing.T) {
+		req.Header.Set("X-Pyrus-Sig", hash)
 
-	require.Equal(t, http.StatusOK, resp.StatusCode)
-	assert.NotNil(t, <-events)
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		assert.NoError(t, resp.Body.Close())
+
+		require.Equal(t, http.StatusOK, resp.StatusCode)
+		assert.NotNil(t, <-events)
+	})
+
+	t.Run("invalid hash", func(t *testing.T) {
+		req.Header.Set("X-Pyrus-Sig", "invalid_hash")
+
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		assert.NoError(t, resp.Body.Close())
+
+		require.Equal(t, http.StatusBadRequest, resp.StatusCode)
+	})
+
+	t.Run("invalid body", func(t *testing.T) {
+		hasher.Reset()
+		_, err = hasher.Write(nil)
+		require.NoError(t, err)
+		hash := strings.ToUpper(hex.EncodeToString(hasher.Sum(nil)))
+
+		req, err := http.NewRequest(
+			http.MethodPost,
+			ts.URL,
+			nil,
+		)
+		require.NoError(t, err)
+		req.Header.Set("X-Pyrus-Sig", hash)
+
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		assert.NoError(t, resp.Body.Close())
+
+		require.Equal(t, http.StatusBadRequest, resp.StatusCode)
+	})
 }
 
 func TestClient_Auth(t *testing.T) {

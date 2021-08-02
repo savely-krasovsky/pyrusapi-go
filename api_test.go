@@ -18,12 +18,19 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"os"
+	"reflect"
 	"strconv"
 	"strings"
 	"testing"
 	"time"
+	"unsafe"
 
 	"github.com/stretchr/testify/assert"
+)
+
+const (
+	fakePyrusLogin       = "login"
+	fakePyrusSecurityKey = "security_key"
 )
 
 var (
@@ -228,12 +235,14 @@ func TestMain(m *testing.M) {
 	r := chi.NewRouter()
 	for k, v := range requests {
 		k := k
+		v := v
 		mp := strings.Split(k, ":")
 		method := mp[0]
 		path := mp[1]
 
-		v := v
 		r.Method(method, path, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			v := v
+
 			switch k {
 			case requestDownloadFile:
 				w.Header().Set("Content-Type", "text/plain")
@@ -247,20 +256,17 @@ func TestMain(m *testing.M) {
 			token := r.Header.Get("Authorization")
 			if k != requestAuth && token == "" {
 				w.WriteHeader(http.StatusUnauthorized)
-				b, _ := json.Marshal(map[string]string{
-					"error":      "Неверный токен авторизации.",
-					"error_code": "invalid_token",
-				})
-				w.Write(b) //nolint:errcheck
-				return
+				v = "testdata/error_invalid_token.json"
 			} else if k != requestAuth && token != "Bearer token" {
 				w.WriteHeader(http.StatusUnauthorized)
-				b, _ := json.Marshal(map[string]string{
-					"error":      "Токен авторизации не указан.",
-					"error_code": "token_not_specified",
-				})
-				w.Write(b) //nolint:errcheck
-				return
+				v = "testdata/error_token_not_specified.json"
+			} else if k == requestAuth && token == "" {
+				var authReq authRequest
+				json.NewDecoder(r.Body).Decode(&authReq) //nolint:errcheck
+				if authReq.Login != fakePyrusLogin || authReq.SecurityKey != fakePyrusSecurityKey {
+					w.WriteHeader(http.StatusUnauthorized)
+					v = "testdata/error_invalid_credentials.json"
+				}
 			}
 
 			f, err := os.Open(v)
@@ -280,7 +286,7 @@ func TestMain(m *testing.M) {
 	}
 	ts = httptest.NewServer(r)
 
-	c, err := NewClient("login", "securityKey", WithBaseURL(ts.URL), WithHTTPClient(ts.Client()))
+	c, err := NewClient(fakePyrusLogin, fakePyrusSecurityKey, WithBaseURL(ts.URL), WithHTTPClient(ts.Client()))
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -377,32 +383,94 @@ func TestNewClient(t *testing.T) {
 	}
 	assert.Equal(t, "API error: TEST (cannot_add_external_user)", testErr.Error())
 
-	c, err := NewClient(
-		pyrusLogin,
-		pyrusSecurityKey,
-		WithBaseURL(ts.URL),
-		WithHTTPClient(ts.Client()),
-		WithLogger(noopLogger),
-		WithZapLogger(logger),
-		WithEventBufferSize(100),
-	)
-	require.NoError(t, err)
-	assert.NotNil(t, c)
+	t.Run("valid client", func(t *testing.T) {
+		c, err := NewClient(
+			fakePyrusLogin,
+			fakePyrusSecurityKey,
+			WithBaseURL(ts.URL),
+			WithHTTPClient(ts.Client()),
+			WithLogger(noopLogger),
+			WithZapLogger(logger),
+			WithEventBufferSize(100),
+		)
+		require.NoError(t, err)
+		assert.NotNil(t, c)
 
-	profile, err := c.Profile()
-	assert.NoError(t, err)
-	assert.NotNil(t, profile)
+		profile, err := c.Profile()
+		assert.NoError(t, err)
+		assert.NotNil(t, profile)
+	})
 
-	c, err = NewClient(
-		pyrusLogin,
-		pyrusSecurityKey,
-		WithBaseURL("invalid url"),
-	)
-	require.NoError(t, err)
-	assert.NotNil(t, c)
+	t.Run("client with invalid url", func(t *testing.T) {
+		c, err := NewClient(
+			fakePyrusLogin,
+			fakePyrusSecurityKey,
+			WithBaseURL("%zzzzz"),
+		)
+		require.NoError(t, err)
+		assert.NotNil(t, c)
 
-	_, err = c.Profile()
-	assert.Error(t, err)
+		_, err = c.Profile()
+		assert.Error(t, err)
+	})
+
+	t.Run("client with nonexistent host", func(t *testing.T) {
+		c, err := NewClient(
+			fakePyrusLogin,
+			fakePyrusSecurityKey,
+			WithBaseURL("nonexistent"),
+		)
+		require.NoError(t, err)
+		assert.NotNil(t, c)
+
+		_, err = c.Profile()
+		assert.Error(t, err)
+	})
+
+	t.Run("client auth", func(t *testing.T) {
+		c, err := NewClient(
+			fakePyrusLogin,
+			fakePyrusSecurityKey,
+			WithBaseURL(ts.URL),
+			WithHTTPClient(ts.Client()),
+		)
+		require.NoError(t, err)
+		assert.NotNil(t, c)
+
+		// some reflection will need, accessToken field is unexported
+		accessTokenField := reflect.ValueOf(c).Elem().FieldByName("accessToken")
+		securityKeyField := reflect.ValueOf(c).Elem().FieldByName("securityKey")
+
+		t.Run("requesting first token", func(t *testing.T) {
+			// before the first Client request it should be empty
+			assert.Equal(t, "", accessTokenField.String())
+
+			_, err = c.Profile()
+			assert.NoError(t, err)
+			// after the request it should be "token"
+			assert.Equal(t, "token", accessTokenField.String())
+		})
+
+		t.Run("refreshing old or invalid token automatically", func(t *testing.T) {
+			// now with will try to make it invalid and see how refresh is working
+			reflect.NewAt(accessTokenField.Type(), unsafe.Pointer(accessTokenField.UnsafeAddr())).Elem().SetString("invalid_token")
+
+			_, err = c.Profile()
+			assert.NoError(t, err)
+		})
+
+		t.Run("using invalid token and returning an error", func(t *testing.T) {
+			// finally, let's try to change both stored token and auth credentials in case of account deactivation
+			reflect.NewAt(accessTokenField.Type(), unsafe.Pointer(accessTokenField.UnsafeAddr())).Elem().SetString("invalid_token")
+			reflect.NewAt(securityKeyField.Type(), unsafe.Pointer(securityKeyField.UnsafeAddr())).Elem().SetString("invalid_security_key")
+
+			_, err = c.Profile()
+			assert.Error(t, err)
+		})
+
+		// return to valid
+		reflect.NewAt(securityKeyField.Type(), unsafe.Pointer(securityKeyField.UnsafeAddr())).Elem().SetString(fakePyrusSecurityKey)
+	})
 }
 
 func TestClient_WebhookHandler(t *testing.T) {
@@ -416,7 +484,7 @@ func TestClient_WebhookHandler(t *testing.T) {
 	b, err := io.ReadAll(f)
 	require.NoError(t, err)
 
-	hasher := hmac.New(sha1.New, []byte("securityKey"))
+	hasher := hmac.New(sha1.New, []byte(fakePyrusSecurityKey))
 	_, err = hasher.Write(b)
 	require.NoError(t, err)
 	hash := strings.ToUpper(hex.EncodeToString(hasher.Sum(nil)))
@@ -438,7 +506,7 @@ func TestClient_WebhookHandler(t *testing.T) {
 }
 
 func TestClient_Auth(t *testing.T) {
-	token, err := cl.Auth(pyrusLogin, pyrusSecurityKey)
+	token, err := cl.Auth(fakePyrusLogin, fakePyrusSecurityKey)
 	require.NoError(t, err)
 	assert.Equal(t, "token", token)
 }

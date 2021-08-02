@@ -218,7 +218,7 @@ func (c *Client) performRequest(method, path string, q *url.Values, reqBody, res
 	}
 
 	c.mu.RLock()
-	if c.accessToken != "" {
+	if c.accessToken != "" && !auth {
 		req.Header.Set("Authorization", "Bearer "+c.accessToken)
 	}
 	c.mu.RUnlock()
@@ -228,8 +228,7 @@ func (c *Client) performRequest(method, path string, q *url.Values, reqBody, res
 		c.logger.Error("Error while doing a request!", err)
 		return err
 	}
-	//nolint:errcheck
-	defer resp.Body.Close()
+	defer resp.Body.Close() //nolint:errcheck
 
 	// Get new access_token in case of old session
 	if resp.StatusCode == 401 && !auth {
@@ -241,7 +240,7 @@ func (c *Client) performRequest(method, path string, q *url.Values, reqBody, res
 	}
 
 	// Don't read if there is no need in response body at all
-	if respBody == nil {
+	if respBody == nil && !auth {
 		return nil
 	}
 

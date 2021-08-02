@@ -1,0 +1,4 @@
+{
+  "error": "Неверный токен авторизации.",
+  "error_code": "invalid_token"
+}

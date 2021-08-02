@@ -1,0 +1,4 @@
+{
+  "error": "Токен авторизации не указан.",
+  "error_code": "token_not_specified"
+}

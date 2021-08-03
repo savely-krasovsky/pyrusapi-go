@@ -109,8 +109,8 @@ func WithBaseURL(baseURL string) Option {
 	}
 }
 
-// NewClient returns an instance of Client that implements IClient.
-func NewClient(login, securityKey string, opts ...Option) (IClient, error) {
+// NewClient returns an instance of Client.
+func NewClient(login, securityKey string, opts ...Option) (*Client, error) {
 	c := &Client{
 		baseURL: baseURL,
 

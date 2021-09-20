@@ -13,7 +13,7 @@
       "external_id": "8e02d19b-8762-40ad-b04a-74c78e8a8977",
       "department_id": 123456,
       "banned": false,
-      "position": "Аналитик по информационной безопасности",
+      "position": "Менеджер",
       "skype": "",
       "phone": ""
     },
@@ -34,7 +34,7 @@
             "external_id": "8e02d19b-8762-40ad-b04a-74c78e8a8977",
             "department_id": 123456,
             "banned": false,
-            "position": "Аналитик по информационной безопасности",
+            "position": "Менеджер",
             "skype": "",
             "phone": ""
           },
@@ -98,13 +98,13 @@
       {
         "id": 5,
         "type": "form_link",
-        "name": "[Проверка ИБ] Контроль исправлений",
+        "name": "Тестовая задача",
         "value": {
           "task_id": 123456,
           "task_ids": [
             90677665
           ],
-          "subject": "[Проверка ИБ] Контроль исправлений: backoffice.halvacard.ru"
+          "subject": "Тестовая задача"
         }
       },
       {
@@ -162,7 +162,7 @@
           "external_id": "8e02d19b-8762-40ad-b04a-74c78e8a8977",
           "department_id": 123456,
           "banned": false,
-          "position": "Аналитик по информационной безопасности",
+          "position": "Менеджер",
           "skype": "",
           "phone": ""
         }
@@ -317,7 +317,7 @@
           "external_id": "8e02d19b-8762-40ad-b04a-74c78e8a8977",
           "department_id": 123456,
           "banned": false,
-          "position": "Аналитик по информационной безопасности",
+          "position": "Менеджер",
           "skype": "",
           "phone": ""
         }
@@ -376,7 +376,7 @@
           "external_id": "8e02d19b-8762-40ad-b04a-74c78e8a8977",
           "department_id": 123456,
           "banned": false,
-          "position": "Аналитик по информационной безопасности",
+          "position": "Менеджер",
           "skype": "",
           "phone": ""
         },
@@ -448,7 +448,7 @@
               "task_ids": [
                 123456
               ],
-              "subject": "[Проверка ИБ] Контроль исправлений: backoffice.halvacard.ru"
+              "subject": "Тестовая задача"
             }
           },
           {
@@ -630,7 +630,7 @@
                 "external_id": "8e02d19b-8762-40ad-b04a-74c78e8a8977",
                 "department_id": 123456,
                 "banned": false,
-                "position": "Аналитик по информационной безопасности",
+                "position": "Менеджер",
                 "skype": "",
                 "phone": ""
               },

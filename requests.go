@@ -34,6 +34,7 @@ type TaskRequest struct {
 	ScheduledDatetimeUTC *time.Time    `json:"scheduled_datetime_utc,omitempty"`
 	Approvals            [][]*Person   `json:"approvals,omitempty"`
 	FormID               int           `json:"form_id,omitempty"`
+	Fields               []*FormField  `json:"fields,omitempty"`
 	FillDefaults         bool          `json:"fill_defaults,omitempty"`
 }
 

@@ -64,6 +64,7 @@ const (
 	ChoiceTypeAcknowledged ChoiceType = "acknowledged"
 	ChoiceTypeRejected     ChoiceType = "rejected"
 	ChoiceTypeRevoked      ChoiceType = "revoked"
+	ChoiceTypeWaiting      ChoiceType = "waiting"
 )
 
 // ActionType is a type of action in case of task.

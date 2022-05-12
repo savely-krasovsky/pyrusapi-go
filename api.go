@@ -48,13 +48,16 @@ type IClient interface {
 	Task(taskID int) (*TaskResponse, error)
 	CreateTask(req *TaskRequest) (*TaskResponse, error)
 	CommentTask(taskID int, req *TaskCommentRequest) (*TaskResponse, error)
+	Announcement(announcementID int) (*AnnouncementResponse, error)
+	CreateAnnouncement(req *AnnouncementRequest) (*AnnouncementResponse, error)
+	CommentAnnouncement(announcementID int, req *AnnouncementCommentRequest) (*AnnouncementResponse, error)
 	UploadFile(name string, file io.Reader) (*UploadResponse, error)
 	DownloadFile(fileID int) (*DownloadResponse, error)
 	Catalogs() (*CatalogsResponse, error)
 	Catalog(catalogID int) (*CatalogResponse, error)
 	CreateCatalog(name string, headers []string, items []*CatalogItem) (*CatalogResponse, error)
 	SyncCatalog(catalogID int, apply bool, headers []string, items []*CatalogItem) (*SyncCatalogResponse, error)
-	Contacts() (*ContactsResponse, error)
+	Contacts(includeInactive bool) (*ContactsResponse, error)
 	Members() (*MembersResponse, error)
 	CreateMember(req *MemberRequest) (*Member, error)
 	UpdateMember(memberID int, req *MemberRequest) (*Member, error)
@@ -378,6 +381,44 @@ func (c *Client) CommentTask(taskID int, req *TaskCommentRequest) (*TaskResponse
 	return &task, nil
 }
 
+// Announcement returns an announcement with all comments.
+func (c *Client) Announcement(announcementID int) (*AnnouncementResponse, error) {
+	var announcement AnnouncementResponse
+	if err := c.performRequest(http.MethodGet, "/announcements/"+strconv.Itoa(announcementID), nil, nil, &announcement); err != nil {
+		return nil, err
+	}
+
+	return &announcement, nil
+}
+
+// CreateAnnouncement creates an announcement and returns it with a comment.
+func (c *Client) CreateAnnouncement(req *AnnouncementRequest) (*AnnouncementResponse, error) {
+	if err := req.Validate(); err != nil {
+		return nil, err
+	}
+
+	var announcement AnnouncementResponse
+	if err := c.performRequest(http.MethodPost, "/announcements", nil, req, &announcement); err != nil {
+		return nil, err
+	}
+
+	return &announcement, nil
+}
+
+// CommentAnnouncement comments a task and returns it with all comments, including the added one.
+func (c *Client) CommentAnnouncement(announcementID int, req *AnnouncementCommentRequest) (*AnnouncementResponse, error) {
+	if err := req.Validate(); err != nil {
+		return nil, err
+	}
+
+	var announcement AnnouncementResponse
+	if err := c.performRequest(http.MethodPost, "/announcements/"+strconv.Itoa(announcementID)+"/comments", nil, req, &announcement); err != nil {
+		return nil, err
+	}
+
+	return &announcement, nil
+}
+
 // UploadFile uploads files for subsequent attachment to tasks.
 // Files that are not referenced by any task are removed after a while.
 func (c *Client) UploadFile(name string, file io.Reader) (*UploadResponse, error) {
@@ -456,9 +497,14 @@ func (c *Client) SyncCatalog(catalogID int, apply bool, headers []string, items 
 }
 
 // Contacts returns a list of contacts available to the current user and grouped by organization.
-func (c *Client) Contacts() (*ContactsResponse, error) {
+func (c *Client) Contacts(includeInactive bool) (*ContactsResponse, error) {
+	q := &url.Values{}
+	if includeInactive {
+		q.Set("include_inactive", "y")
+	}
+
 	var contacts ContactsResponse
-	if err := c.performRequest(http.MethodGet, "/contacts", nil, nil, &contacts); err != nil {
+	if err := c.performRequest(http.MethodGet, "/contacts", q, nil, &contacts); err != nil {
 		return nil, err
 	}
 

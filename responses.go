@@ -37,6 +37,11 @@ type TaskResponse struct {
 	Task *TaskWithComments `json:"task"`
 }
 
+// AnnouncementResponse represents a response from Announcement method.
+type AnnouncementResponse struct {
+	Announcement *AnnouncementWithComments `json:"announcement"`
+}
+
 // ContactsResponse represents a response from Contacts method.
 type ContactsResponse struct {
 	Organizations []*Organization `json:"organizations"`

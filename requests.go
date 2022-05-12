@@ -199,6 +199,7 @@ type RegistryRequest struct {
 	CreatedAfter    *time.Time `json:"created_after,omitempty"`
 	ClosedBefore    *time.Time `json:"closed_before,omitempty"`
 	ClosedAfter     *time.Time `json:"closed_after,omitempty"`
+	TaskIDs         []int      `json:"task_ids,omitempty"`
 }
 
 // MarshalJSON is a custom RegistryRequest marshaller that allows to merge the main struct and a map of field filters.
@@ -251,6 +252,34 @@ func (r *RegistryRequest) MarshalJSON() ([]byte, error) {
 	}
 
 	return json.Marshal(m)
+}
+
+// AnnouncementRequest is necessary to create a task.
+type AnnouncementRequest struct {
+	Text        string     `json:"text"`
+	Attachments []*NewFile `json:"attachments,omitempty"`
+}
+
+// Validate allows to validate request before sending.
+func (r AnnouncementRequest) Validate() error {
+	return validation.ValidateStruct(
+		&r,
+		validation.Field(&r.Text, validation.Required),
+	)
+}
+
+// AnnouncementCommentRequest is necessary to create a comment in the announcement.
+type AnnouncementCommentRequest struct {
+	Text        string     `json:"text"`
+	Attachments []*NewFile `json:"attachments,omitempty"`
+}
+
+// Validate allows to validate request before sending.
+func (r AnnouncementCommentRequest) Validate() error {
+	return validation.ValidateStruct(
+		&r,
+		validation.Field(&r.Text, validation.Required),
+	)
 }
 
 type fileRequest struct {

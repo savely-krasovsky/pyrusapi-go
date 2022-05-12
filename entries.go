@@ -8,9 +8,9 @@ import (
 // FormField is a Form field. Forms consist of fields.
 // They could usually have tree structure, so often you will have to use type assertion.
 type FormField struct {
-	ID    int            `json:"id"`
-	Type  FieldType      `json:"type"`
-	Name  string         `json:"name"`
+	ID    int            `json:"id,omitempty"`
+	Type  FieldType      `json:"type,omitempty"`
+	Name  string         `json:"name,omitempty"`
 	Info  *FormFieldInfo `json:"info,omitempty"`
 	Value interface{}    `json:"value,omitempty"`
 	// ParentID returns if field has parent
@@ -35,6 +35,10 @@ type FormFieldInfo struct {
 	Fields []*FormField `json:"fields,omitempty"`
 	// DecimalPlaces return for a number field
 	DecimalPlaces int `json:"decimal_places,omitempty"`
+	// MultipleChoice returns a flag indicating that multiple values can be selected in Catalog field
+	MultipleChoice bool `json:"multiple_choice,omitempty"`
+	// Code returns code of a field
+	Code string `json:"code,omitempty"`
 }
 
 // ChoiceOption represents a choice option of multiple_choice field type.
@@ -215,6 +219,7 @@ type TaskHeader struct {
 
 	Text        string  `json:"text"`
 	Responsible *Person `json:"responsible"`
+	DueDate     string  `json:"due_date"`
 }
 
 // Task represents a task without comments.
@@ -247,6 +252,16 @@ type TaskWithComments struct {
 	*Task
 
 	Comments []*TaskComment `json:"comments,omitempty"`
+}
+
+// AnnouncementWithComments represents an announcement with all of its comments.
+type AnnouncementWithComments struct {
+	ID          int                    `json:"id"`
+	CreateDate  time.Time              `json:"create_date"`
+	Author      *Person                `json:"author"`
+	Attachments []*File                `json:"attachments"`
+	Comments    []*AnnouncementComment `json:"comments"`
+	Text        string                 `json:"text"`
 }
 
 // Person represents a user of Pyrus.
@@ -289,6 +304,7 @@ type Subscriber struct {
 type TaskComment struct {
 	ID                     int        `json:"id"`
 	Text                   string     `json:"text"`
+	Mentions               []int      `json:"mentions"`
 	CreateDate             time.Time  `json:"create_date"`
 	Author                 *Person    `json:"author"`
 	Attachments            []*File    `json:"attachments"`
@@ -304,6 +320,8 @@ type TaskComment struct {
 	SubscribersAdded       []*Person  `json:"subscribers_added"`
 	SubscribersRemoved     []*Person  `json:"subscribers_removed"`
 	SubscribersRerequested []*Person  `json:"subscribers_rerequested"`
+	SkipSatisfaction       bool       `json:"skip_satisfaction"`
+	ReplyNoteID            *int       `json:"reply_note_id"`
 
 	ReassignedTo        *Person    `json:"reassigned_to"`
 	ParticipantsAdded   []*Person  `json:"participants_added"`
@@ -323,12 +341,21 @@ type TaskComment struct {
 	Channel              *Channel      `json:"channel"`
 }
 
+type AnnouncementComment struct {
+	ID          int       `json:"id"`
+	Text        string    `json:"text"`
+	CreateDate  time.Time `json:"create_date"`
+	Author      *Person   `json:"author"`
+	Attachments []*File   `json:"attachments"`
+}
+
 // Organization represents organization with persons and roles of it.
 type Organization struct {
-	ID      int       `json:"id"`
-	Name    string    `json:"name"`
-	Persons []*Person `json:"persons"`
-	Roles   []*Role   `json:"roles"`
+	ID                  int       `json:"organization_id"`
+	Name                string    `json:"name"`
+	Persons             []*Person `json:"persons"`
+	Roles               []*Role   `json:"roles"`
+	DepartmentCatalogID int       `json:"department_catalog_id"`
 }
 
 // Role represents role and its members.
@@ -361,8 +388,8 @@ type Table []*TableRow
 // TableRow is an element of table.
 type TableRow struct {
 	RowID  int          `json:"row_id"`
-	Cells  []*FormField `json:"cells"`
-	Delete bool         `json:"delete"`
+	Cells  []*FormField `json:"cells,omitempty"`
+	Delete bool         `json:"delete,omitempty"`
 }
 
 // Title represents a form field title (official docs doesn't explain what exactly it is).
@@ -373,10 +400,10 @@ type Title struct {
 
 // MultipleChoice represents a form field with multiple choice dropdown menu.
 type MultipleChoice struct {
-	ChoiceIDs   []int        `json:"choice_ids"`
-	ChoiceNames []string     `json:"choice_names"`
-	Fields      []*FormField `json:"fields"`
-	ChoiceID    int          `json:"choice_id"`
+	ChoiceIDs   []int        `json:"choice_ids,omitempty"`
+	ChoiceNames []string     `json:"choice_names,omitempty"`
+	Fields      []*FormField `json:"fields,omitempty"`
+	ChoiceID    int          `json:"choice_id,omitempty"`
 }
 
 // FormLink represents a form field (official docs doesn't explain what exactly it is).
@@ -419,4 +446,17 @@ type Member struct {
 	Position       string     `json:"position"`
 	Skype          string     `json:"skype"`
 	Phone          string     `json:"phone"`
+}
+
+type NewFile struct {
+	// GUID is an uploaded file GUID
+	GUID string `json:"guid,omitempty"`
+	// RootID is an existing file ID to create new version (optional)
+	RootID int `json:"root_id,omitempty"`
+	// AttachmentID is existing file ID
+	AttachmentID int `json:"attachment_id,omitempty"`
+	// URL existing file URL
+	URL string `json:"url,omitempty"`
+	// Name is link name (optional)
+	Name string `json:"name,omitempty"`
 }

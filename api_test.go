@@ -7,9 +7,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
-	"github.com/go-chi/chi/v5"
-	"github.com/stretchr/testify/require"
-	"go.uber.org/zap"
 	"io"
 	"io/fs"
 	"log"
@@ -24,6 +21,10 @@ import (
 	"testing"
 	"time"
 	"unsafe"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/require"
+	"go.uber.org/zap"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -602,7 +603,7 @@ func TestClient_Catalog(t *testing.T) {
 }
 
 func TestClient_Contacts(t *testing.T) {
-	contacts, err := cl.Contacts()
+	contacts, err := cl.Contacts(true)
 	require.NoError(t, err)
 	assert.NotNil(t, contacts)
 }
